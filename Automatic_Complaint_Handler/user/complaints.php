@@ -96,6 +96,42 @@ include '../includes/header.php';
         100% { background-position: 0% 50%; }
     }
 
+    .btn {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        border-radius: 20px;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-sm {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        background: rgba(67, 97, 238, 0.3);
+    }
+
+    .btn-outline {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 15px;
+    }
+
     .modal {
         display: none;
         position: fixed;

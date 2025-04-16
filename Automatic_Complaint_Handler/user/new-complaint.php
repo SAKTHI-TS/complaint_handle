@@ -156,10 +156,56 @@ include '../includes/header.php';
         background: rgba(255, 255, 255, 0.2) !important;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
+
+    .btn {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        border-radius: 20px;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-outline {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group textarea {
+        width: 100%;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        color: #000;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        min-height: 150px;
+        resize: vertical;
+        font-family: inherit;
+    }
+
+    .form-group textarea::placeholder {
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+    .form-group textarea:focus {
+        outline: none;
+        border-color: rgba(67, 97, 238, 0.5);
+        box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+        background: rgba(255, 255, 255, 0.95);
+    }
 </style>
 
 <div class="new-complaint">
->>>>>>> 8e3c0a10c02863c8e502d8b2d84e9a93e81b72fa
     <div class="page-header">
         <h1>Submit New Complaint</h1>
         <a href="complaints.php" class="btn btn-outline">Back to Complaints</a>
@@ -237,30 +283,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
-<style>
-.complaint-form {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-.alert {
-    margin-top: 1rem;
-    padding: 1rem;
-    border-radius: 4px;
-}
-.form-group {
-    margin-bottom: 1.5rem;
-}
-.form-control {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-</style>
 
 <?php include '../includes/footer.php'; ?>
