@@ -73,14 +73,34 @@ $pageTitle = "Login";
             overflow: hidden;
         }
 
+        .home-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .home-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
         .login-container {
-            background: rgba(255, 255, 255, 0.15);
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.18);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            width: 450px;
+            width: 400px;
             max-width: 90%;
             padding: 40px;
             text-align: center;
@@ -90,6 +110,7 @@ $pageTitle = "Login";
 
         .login-header {
             margin-bottom: 30px;
+            padding-top: 20px;
         }
 
         .login-header i {
@@ -232,6 +253,9 @@ $pageTitle = "Login";
     </style>
 </head>
 <body>
+    <a href="index.php" class="home-btn">
+        <i class="fas fa-home"></i> Home
+    </a>
     <div class="login-container">
         <div class="login-box">
             <div class="login-header">

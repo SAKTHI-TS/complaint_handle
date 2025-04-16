@@ -77,6 +77,158 @@ $pageTitle = "Admin Dashboard";
 include dirname(__FILE__) . '/../includes/header.php';
 ?>
 
+<style>
+    :root {
+        --primary: #4361ee;
+        --secondary: #3a0ca3;
+        --accent: #f72585;
+        --light: #f8f9fa;
+        --dark: #212529;
+    }
+
+    body {
+        background: linear-gradient(-45deg, #3a0ca3, #4361ee, #4cc9f0, #f72585);
+        background-size: 400% 400%;
+        min-height: 100vh;
+        animation: gradientBG 15s ease infinite;
+    }
+
+    .admin-dashboard {
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .dashboard-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 30px;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 15px;
+        padding: 20px;
+        color: white;
+        text-align: center;
+        transition: transform 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .stat-icon {
+        font-size: 2rem;
+        margin-top: 10px;
+        opacity: 0.8;
+    }
+
+    .recent-complaints {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 20px;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+    }
+
+    .complaints-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        background: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .complaints-table td {
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .complaints-table tr:hover td {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .status-badge.pending { background: rgba(255, 193, 7, 0.2); }
+    .status-badge.in-progress { background: rgba(13, 110, 253, 0.2); }
+    .status-badge.resolved { background: rgba(25, 135, 84, 0.2); }
+    .status-badge.rejected { background: rgba(220, 53, 69, 0.2); }
+
+    .btn {
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: none;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-label {
+        color: rgba(255, 255, 255, 0.95);
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+
+    h2 {
+        color: #fff;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+</style>
+
 <div class="admin-dashboard">
     <div class="dashboard-header">
         <h1><i class="fas fa-tachometer-alt"></i> <?php echo $department; ?> Department Dashboard</h1>
@@ -132,9 +284,10 @@ include dirname(__FILE__) . '/../includes/header.php';
                 </tr>
             </thead>
             <tbody>
+                <?php $counter = 1; ?>
                 <?php foreach ($recentComplaints as $complaint): ?>
                 <tr>
-                    <td><?php echo $complaint['id']; ?></td>
+                    <td><?php echo $counter++; ?></td>
                     <td><?php echo htmlspecialchars($complaint['title']); ?></td>
                     <td><?php echo htmlspecialchars($complaint['category_name']); ?></td>
                     <td><?php echo htmlspecialchars($complaint['first_name'] . ' ' . $complaint['last_name']); ?></td>
@@ -145,7 +298,7 @@ include dirname(__FILE__) . '/../includes/header.php';
                         </span>
                     </td>
                     <td>
-                        <a href="#" class="btn btn-sm btn-info" data-description="<?php echo htmlspecialchars($complaint['description']); ?>">
+                        <a href="complaints.php?action=view&id=<?php echo $complaint['id']; ?>" class="btn btn-sm btn-info">
                             <i class="fas fa-eye"></i> View
                         </a>
                     </td>
@@ -161,74 +314,5 @@ include dirname(__FILE__) . '/../includes/header.php';
         </div>
     </div>
 </div>
-
-<!-- Complaint Details Modal -->
-<div class="modal" id="complaintModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Complaint Details</h3>
-            <span class="close-modal">&times;</span>
-        </div>
-        <div class="modal-body">
-            <div class="complaint-details">
-                <div class="detail-row">
-                    <strong>Title:</strong>
-                    <span id="modal-title"></span>
-                </div>
-                <div class="detail-row">
-                    <strong>Category:</strong>
-                    <span id="modal-category"></span>
-                </div>
-                <div class="detail-row">
-                    <strong>Description:</strong>
-                    <p id="modal-description"></p>
-                </div>
-                <div class="detail-row">
-                    <strong>Status:</strong>
-                    <span id="modal-status"></span>
-                </div>
-                <div class="detail-row">
-                    <strong>Submitted By:</strong>
-                    <span id="modal-user"></span>
-                </div>
-                <div class="detail-row">
-                    <strong>Date:</strong>
-                    <span id="modal-date"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const viewBtns = document.querySelectorAll('.btn-info');
-    const modal = document.getElementById('complaintModal');
-    const closeBtn = modal.querySelector('.close-modal');
-    
-    viewBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const row = this.closest('tr');
-            
-            // Populate modal with complaint details
-            document.getElementById('modal-title').textContent = row.querySelector('td:nth-child(2)').textContent;
-            document.getElementById('modal-category').textContent = row.querySelector('td:nth-child(3)').textContent;
-            document.getElementById('modal-description').textContent = this.getAttribute('data-description');
-            document.getElementById('modal-status').innerHTML = row.querySelector('td:nth-child(6)').innerHTML;
-            document.getElementById('modal-user').textContent = row.querySelector('td:nth-child(4)').textContent;
-            document.getElementById('modal-date').textContent = row.querySelector('td:nth-child(5)').textContent;
-            
-            modal.style.display = 'block';
-        });
-    });
-    
-    closeBtn.addEventListener('click', () => modal.style.display = 'none');
-    
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) modal.style.display = 'none';
-    });
-});
-</script>
 
 <?php include dirname(__FILE__) . '/../includes/footer.php'; ?>
