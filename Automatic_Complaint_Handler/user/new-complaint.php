@@ -12,7 +12,154 @@ $pageTitle = "Submit New Complaint";
 include '../includes/header.php';
 ?>
 
+
 <div class="container">
+
+<style>
+    :root {
+        --primary: #4361ee;
+        --secondary: #3a0ca3;
+        --accent: #f72585;
+        --light: #f8f9fa;
+        --dark: #212529;
+    }
+
+    body {
+        background: linear-gradient(-45deg, #3a0ca3, #4361ee, #4cc9f0, #f72585);
+        background-size: 400% 400%;
+        min-height: 100vh;
+        animation: gradientBG 15s ease infinite;
+        color: #fff;
+    }
+
+    .new-complaint {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .page-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    form {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: #fff;
+    }
+
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: #fff;
+        font-size: 1rem;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+    }
+
+    .form-group select:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group select option {
+        background: #4361ee;
+        color: white;
+        padding: 12px;
+    }
+
+    .form-group select optgroup {
+        background: #3a0ca3;
+        color: white;
+        font-weight: 600;
+        padding: 8px;
+    }
+
+    .form-group select::-ms-expand {
+        display: none;
+    }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .form-actions .btn {
+        flex: 1;
+        padding: 15px;
+        font-size: 1.1rem;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .btn-primary {
+        background: rgba(67, 97, 238, 0.3) !important;
+    }
+
+    .form-actions .btn:hover {
+        transform: translateY(-3px);
+        background: rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="new-complaint">
+>>>>>>> 8e3c0a10c02863c8e502d8b2d84e9a93e81b72fa
     <div class="page-header">
         <h1>Submit New Complaint</h1>
         <a href="complaints.php" class="btn btn-outline">Back to Complaints</a>

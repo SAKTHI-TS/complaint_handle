@@ -110,9 +110,10 @@ include '../includes/header.php';
                 </tr>
             </thead>
             <tbody>
+                <?php $counter = 1; ?>
                 <?php foreach ($complaints as $complaint): ?>
                 <tr>
-                    <td><?php echo $complaint['id']; ?></td>
+                    <td><?php echo $counter++; ?></td>
                     <td><?php echo htmlspecialchars($complaint['title']); ?></td>
                     <td><?php echo htmlspecialchars($complaint['category_name']); ?></td>
                     <td><?php echo htmlspecialchars($complaint['first_name'] . ' ' . $complaint['last_name']); ?></td>
@@ -123,7 +124,7 @@ include '../includes/header.php';
                         </span>
                     </td>
                     <td>
-                        <a href="complaints.php?action=view&id=<?php echo $complaint['id']; ?>" class="btn btn-sm btn-info">
+                        <a href="#" class="btn btn-sm btn-info" data-description="<?php echo htmlspecialchars($complaint['description']); ?>">
                             <i class="fas fa-eye"></i> View
                         </a>
                         <button class="btn btn-sm btn-primary update-status-btn" data-id="<?php echo $complaint['id']; ?>">
@@ -167,6 +168,318 @@ include '../includes/header.php';
     </div>
 </div>
 
+<!-- Complaint Details Modal -->
+<div class="modal" id="complaintModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Complaint Details</h3>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="complaint-details">
+                <div class="detail-row">
+                    <strong>Title:</strong>
+                    <span id="modal-title"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Category:</strong>
+                    <span id="modal-category"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Description:</strong>
+                    <p id="modal-description"></p>
+                </div>
+                <div class="detail-row">
+                    <strong>Status:</strong>
+                    <span id="modal-status"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Submitted By:</strong>
+                    <span id="modal-user"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Date:</strong>
+                    <span id="modal-date"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary: #4361ee;
+        --secondary: #3a0ca3;
+        --accent: #f72585;
+        --light: #f8f9fa;
+        --dark: #212529;
+    }
+
+    body {
+        background: linear-gradient(-45deg, #3a0ca3, #4361ee, #4cc9f0, #f72585);
+        background-size: 400% 400%;
+        min-height: 100vh;
+        animation: gradientBG 15s ease infinite;
+    }
+
+    .admin-complaints {
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 30px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .complaints-list {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 20px;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 30px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 600px;
+        color: white;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-header h3 {
+        font-size: 1.5rem;
+        margin: 0;
+        color: white;
+    }
+
+    .close-modal {
+        cursor: pointer;
+        font-size: 24px;
+        color: rgba(255, 255, 255, 0.8);
+        transition: all 0.3s ease;
+    }
+
+    .close-modal:hover {
+        color: white;
+    }
+
+    .complaint-details .detail-row {
+        margin-bottom: 15px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .complaint-details strong {
+        min-width: 120px;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 600;
+    }
+
+    /* Form elements in modal */
+    #statusForm .form-group {
+        margin-bottom: 20px;
+    }
+
+    #statusForm label {
+        display: block;
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+    }
+
+    #statusForm select,
+    #statusForm textarea {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+    }
+
+    #statusForm select:focus,
+    #statusForm textarea:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    #statusForm button {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #statusForm button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    #statusForm select {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+    }
+
+    #statusForm select:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
+
+    #statusForm select option {
+        background: #4361ee;
+        color: white;
+        padding: 12px;
+    }
+
+    #statusForm select::-ms-expand {
+        display: none;
+    }
+
+    #statusForm textarea {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    #statusForm textarea:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+    }
+
+    .complaints-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        background: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .complaints-table td {
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    h1, h2, h3 {
+        color: #fff;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .page-header h1 {
+        font-size: 1.8rem;
+        margin: 0;
+    }
+
+    .complaints-table td {
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .complaints-table tr:hover td {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn {
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: none;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const updateBtns = document.querySelectorAll('.update-status-btn');
@@ -191,6 +504,34 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.style.display = 'none';
         }
     });
+});
+
+// Add view modal functionality
+const viewBtns = document.querySelectorAll('.btn-info');
+const viewModal = document.getElementById('complaintModal');
+const viewCloseBtn = viewModal.querySelector('.close-modal');
+
+viewBtns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const row = this.closest('tr');
+        
+        // Populate modal with complaint details
+        document.getElementById('modal-title').textContent = row.querySelector('td:nth-child(2)').textContent;
+        document.getElementById('modal-category').textContent = row.querySelector('td:nth-child(3)').textContent;
+        document.getElementById('modal-description').textContent = this.getAttribute('data-description');
+        document.getElementById('modal-status').innerHTML = row.querySelector('td:nth-child(6)').innerHTML;
+        document.getElementById('modal-user').textContent = row.querySelector('td:nth-child(4)').textContent;
+        document.getElementById('modal-date').textContent = row.querySelector('td:nth-child(5)').textContent;
+        
+        viewModal.style.display = 'block';
+    });
+});
+
+viewCloseBtn.addEventListener('click', () => viewModal.style.display = 'none');
+
+window.addEventListener('click', (e) => {
+    if (e.target === viewModal) viewModal.style.display = 'none';
 });
 </script>
 

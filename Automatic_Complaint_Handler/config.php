@@ -5,6 +5,18 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'complaint_system');
 
+try {
+    $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    
+    if ($db->connect_error) {
+        throw new Exception('Connection failed: ' . $db->connect_error);
+    }
+    
+    $db->set_charset('utf8mb4');
+} catch (Exception $e) {
+    die('Database connection failed. Please make sure the database is properly set up.');
+}
+
 // Session configuration
 define('SESSION_TIMEOUT', 1800); // 30 minutes
 define('BASE_URL', 'http://localhost/complaint-system');
