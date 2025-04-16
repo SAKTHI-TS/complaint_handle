@@ -25,18 +25,20 @@ include '../includes/header.php';
 <div class="user-complaints">
     <div class="page-header">
         <h1><i class="fas fa-list"></i> My Complaints</h1>
-        <a href="dashboard.php" class="btn btn-outline">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
+        <div class="header-actions">
+            <a href="new-complaint.php" class="btn btn-primary">
+                <i class="fas fa-plus"></i> File New Complaint
+            </a>
+            <a href="dashboard.php" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
     </div>
     
     <?php if (empty($complaints)): ?>
         <div class="no-complaints">
             <i class="fas fa-info-circle"></i>
             <p>You haven't filed any complaints yet.</p>
-            <a href="new-complaint.php" class="btn btn-primary">
-                <i class="fas fa-plus"></i> File New Complaint
-            </a>
         </div>
     <?php else: ?>
         <div class="complaints-list">
