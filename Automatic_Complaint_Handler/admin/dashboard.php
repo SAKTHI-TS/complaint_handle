@@ -8,16 +8,19 @@ if (!Auth::isAdmin()) {
     exit();
 }
 
-// Get department info
-$departmentId = Auth::getDepartment();
-if (!$departmentId) {
+$auth = new Auth();
+$auth::checkSessionTimeout();
+
+// Get department info - use both name and ID
+$department = $_SESSION['department'] ?? null;
+$departmentId = $_SESSION['department_id'] ?? null;
+
+if (!$department || !$departmentId) {
     session_destroy();
-    header('Location: ../login.php?error=no_department');
+    header('Location: ../login.php?error=session_expired');
     exit();
 }
 
-$auth = new Auth();
-$auth::checkSessionTimeout();
 $auth::requireAdmin();
 
 $db = new Database();

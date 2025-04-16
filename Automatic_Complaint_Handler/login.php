@@ -16,26 +16,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
     
-    // Determine if it's an admin or user login
+    // Determine login type and attempt login
     if (strpos($username, '@') !== false) {
-        // User login (email)
+        // User login attempt
         $result = $auth->userLogin($username, $password);
-        if (isset($result['success']) && $result['success'] === true) {
+        if (isset($result['success'])) {
             header("Location: user/dashboard.php");
             exit();
-        } else {
-            $error = $result['error'];
         }
     } else {
-        // Admin login (username)
+        // Admin login attempt
         $result = $auth->adminLogin($username, $password);
-        if (isset($result['success']) && $result['success'] === true) {
+        if (isset($result['success'])) {
             header("Location: admin/dashboard.php");
             exit();
-        } else {
-            $error = $result['error'];
         }
     }
+    
+    $error = $result['error'] ?? 'Login failed. Please try again.';
 }
 
 $pageTitle = "Login";
