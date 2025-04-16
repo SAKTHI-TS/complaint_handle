@@ -1,46 +1,54 @@
 </main>
 
 <footer class="main-footer">
-    <div class="footer-waves">
-        
-    </div>
     <div class="footer-content">
         <div class="footer-grid">
             <div class="footer-section">
-                <h3><i class="fas fa-info-circle"></i> About Us</h3>
-                <p>Modern complaint management system designed for efficient and transparent grievance resolution.</p>
+                <h3><i class="fas fa-landmark"></i> About Portal</h3>
+                <p>The Public Grievance Portal is an initiative under Digital India to provide citizens with a platform to file complaints and track their resolution status. Available 24x7 for public service.</p>
             </div>
             <div class="footer-section">
-                <h3><i class="fas fa-link"></i> Quick Links</h3>
+                <h3><i class="fas fa-file-alt"></i> Important Documents</h3>
                 <ul class="footer-links">
-                    <li><a href="../index.php"><i class="fas fa-home"></i> Home</a></li>
-                    <?php if (Auth::isLoggedIn()): ?>
-                        <li><a href="<?php echo Auth::isAdmin() ? '../admin/dashboard.php' : '../user/dashboard.php'; ?>">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
-                        </a></li>
-                    <?php else: ?>
-                        <li><a href="../login.php"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                        <li><a href="../register.php"><i class="fas fa-user-plus"></i> Register</a></li>
-                    <?php endif; ?>
+                    <li><a href="../rti.php"><i class="fas fa-arrow-right"></i> RTI Information</a></li>
+                    <li><a href="../policies.php"><i class="fas fa-arrow-right"></i> Policies & Guidelines</a></li>
+                    <li><a href="../citizen-charter.php"><i class="fas fa-arrow-right"></i> Citizen's Charter</a></li>
+                    <li><a href="../notifications.php"><i class="fas fa-arrow-right"></i> Notifications</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h3><i class="fas fa-phone-alt"></i> Contact</h3>
-                <ul class="contact-info">
-                    <li><i class="fas fa-envelope"></i> support@complaintsystem.com</li>
-                    <li><i class="fas fa-phone"></i> +1 (123) 456-7890</li>
-                    <li><i class="fas fa-map-marker-alt"></i> 123 Main St, City, Country</li>
+                <h3><i class="fas fa-shield-alt"></i> Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="../privacy.php"><i class="fas fa-lock"></i> Privacy Policy</a></li>
+                    <li><a href="../terms.php"><i class="fas fa-gavel"></i> Terms of Service</a></li>
+                    <li><a href="../disclaimer.php"><i class="fas fa-exclamation-circle"></i> Disclaimer</a></li>
+                    <li><a href="../accessibility.php"><i class="fas fa-universal-access"></i> Accessibility</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="social-links">
-                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            <div class="govt-logos">
+                <div class="logo-item">
+                    <i class="fas fa-om"></i>
+                    <span>सत्यमेव जयते</span>
+                </div>
+                <div class="logo-item">
+                    <i class="fas fa-landmark"></i>
+                    <span>Government of India</span>
+                </div>
+                <div class="logo-item">
+                    <i class="fas fa-digital-tachograph"></i>
+                    <span>Digital India</span>
+                </div>
+                <div class="logo-item">
+                    <i class="fas fa-certificate"></i>
+                    <span>E-Governance</span>
+                </div>
             </div>
             <div class="copyright">
-                <p>&copy; <?php echo date('Y'); ?> Complaint System. All rights reserved.</p>
+                <p>Website Content Managed by Department of Administrative Reforms & Public Grievances</p>
+                <p>&copy; <?php echo date('Y'); ?> - Ministry of Personnel, Public Grievances & Pensions</p>
+                
             </div>
         </div>
     </div>
@@ -121,6 +129,45 @@
         color: rgba(255, 255, 255, 0.7);
     }
 
+    .govt-logos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    .logo-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        min-width: 120px;
+        transition: all 0.3s ease;
+    }
+
+    .logo-item:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .logo-item i {
+        font-size: 2rem;
+        margin-bottom: 8px;
+        color: #ffd700;
+    }
+
+    .logo-item span {
+        font-size: 0.8rem;
+        text-align: center;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
     @media (max-width: 768px) {
         .footer-grid {
             grid-template-columns: 1fr;
@@ -133,6 +180,15 @@
 
         .social-links {
             padding: 10px 0;
+        }
+
+        .govt-logos {
+            gap: 15px;
+        }
+        
+        .logo-item {
+            min-width: 100px;
+            padding: 10px;
         }
     }
 </style>

@@ -10,7 +10,8 @@ $db = new Database();
 
 // Get all complaints for the current user
 $complaints = $db->query(
-    "SELECT c.id, c.title, c.description, cc.name as category, c.status, c.created_at, c.updated_at
+    "SELECT c.id, c.title, c.description, cc.name as category, c.status, c.created_at, c.updated_at, 
+            c.rejection_reason
      FROM complaints c
      JOIN complaint_categories cc ON c.category_id = cc.id
      WHERE c.user_id = ?
@@ -152,36 +153,104 @@ include '../includes/header.php';
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 20px;
-        border-radius: 15px;
+        padding: 30px;
+        border-radius: 20px;
         width: 90%;
-        max-width: 600px;
+        max-width: 800px;
         color: white;
+        max-height: 90vh;
+        overflow-y: auto;
     }
 
     .modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-header h3 {
+        font-size: 2rem;
+        margin: 0;
     }
 
     .close-modal {
         cursor: pointer;
-        font-size: 24px;
+        font-size: 32px;
         color: rgba(255, 255, 255, 0.8);
+        transition: color 0.3s ease;
+    }
+
+    .close-modal:hover {
+        color: rgba(255, 255, 255, 1);
     }
 
     .complaint-details .detail-row {
-        margin-bottom: 15px;
+        margin-bottom: 25px;
     }
 
     .complaint-details strong {
         display: inline-block;
-        width: 120px;
+        width: 150px;
         color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1rem;
+        vertical-align: top;
+    }
+
+    .complaint-details span,
+    .complaint-details p {
+        display: inline-block;
+        width: calc(100% - 160px);
+        font-size: 1.2rem;
+        line-height: 1.6;
+    }
+
+    #modal-description {
+        white-space: pre-wrap;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+        .modal-content {
+            padding: 20px;
+            width: 95%;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+        }
+
+        .complaint-details strong {
+            display: block;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .complaint-details span,
+        .complaint-details p {
+            display: block;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        #modal-description {
+            margin: 10px 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .modal-content {
+            padding: 15px;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
     }
 </style>
 
@@ -231,7 +300,10 @@ include '../includes/header.php';
                             </span>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-info" data-description="<?php echo htmlspecialchars($complaint['description']); ?>">
+                            <a href="#" class="btn btn-sm btn-info" 
+                               data-description="<?php echo htmlspecialchars($complaint['description']); ?>"
+                               data-rejection="<?php echo htmlspecialchars($complaint['rejection_reason'] ?? ''); ?>"
+                               data-status="<?php echo $complaint['status']; ?>">
                                 <i class="fas fa-eye"></i> View
                             </a>
                         </td>
@@ -275,6 +347,10 @@ include '../includes/header.php';
                         <strong>Last Updated:</strong>
                         <span id="modal-updated"></span>
                     </div>
+                    <div class="detail-row rejection-reason" style="display: none;">
+                        <strong>Rejection Reason:</strong>
+                        <p id="modal-rejection" style="color: #ff4444;"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -286,6 +362,8 @@ include '../includes/header.php';
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const row = this.closest('tr');
+                const status = this.getAttribute('data-status');
+                const rejectionReason = this.getAttribute('data-rejection');
                 
                 // Populate modal with complaint details
                 document.getElementById('modal-title').textContent = row.querySelector('td:nth-child(2)').textContent;
@@ -294,6 +372,15 @@ include '../includes/header.php';
                 document.getElementById('modal-status').innerHTML = row.querySelector('td:nth-child(6)').innerHTML;
                 document.getElementById('modal-date').textContent = row.querySelector('td:nth-child(4)').textContent;
                 document.getElementById('modal-updated').textContent = row.querySelector('td:nth-child(5)').textContent;
+                
+                // Show rejection reason only if status is rejected and reason exists
+                const rejectionElement = document.querySelector('.rejection-reason');
+                if (status === 'rejected' && rejectionReason) {
+                    document.getElementById('modal-rejection').textContent = rejectionReason;
+                    rejectionElement.style.display = 'block';
+                } else {
+                    rejectionElement.style.display = 'none';
+                }
                 
                 document.getElementById('complaintModal').style.display = 'block';
             });

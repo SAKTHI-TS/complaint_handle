@@ -123,15 +123,42 @@
     </style>
 </head>
 <body>
+    <div class="top-bar" style="background: rgba(255, 255, 255, 0.1); padding: 8px 0; font-size: 0.9rem;">
+        <div class="header-container">
+            <div>
+                <span><i class="fas fa-phone-alt"></i> Toll Free: 1800-XXX-XXXX</span>
+                <span style="margin: 0 15px">|</span>
+                <span><i class="fas fa-envelope"></i> support@complaints.gov.in</span>
+            </div>
+            <div>
+                <select style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); color: white;">
+                    <option value="en">English</option>
+                    
+                </select>
+                <a href="#" style="color: white; margin-left: 15px;"><i class="fas fa-accessibility"></i> Screen Reader</a>
+            </div>
+        </div>
+    </div>
     <header class="main-header">
         <div class="header-container">
             <div class="logo">
                 <a href="<?php echo BASE_URL; ?>">
-                    <i class="fas fa-gavel"></i>
-                    <span>Complaint System</span>
+                    <i class="fas fa-landmark"></i>
+                    <div style="display: flex; flex-direction: column;">
+                        <span>Complaint Management Portal</span>
+                        <small style="font-size: 0.8rem; opacity: 0.9;">Government of India</small>
+                    </div>
                 </a>
             </div>
             <nav class="main-nav">
+                <div style="display: flex; gap: 20px; margin-right: 20px;">
+                    <a href="../index.php" class="btn btn-outline">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="../faq.php" class="btn btn-outline">
+                        <i class="fas fa-question-circle"></i> FAQ
+                    </a>
+                </div>
                 <?php if (Auth::isLoggedIn()): ?>
                     <div class="user-menu">
                         <span class="user-greeting">

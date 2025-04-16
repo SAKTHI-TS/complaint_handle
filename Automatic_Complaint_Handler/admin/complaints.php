@@ -271,10 +271,103 @@ include '../includes/header.php';
         backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 30px;
-        border-radius: 15px;
+        border-radius: 20px;
         width: 90%;
-        max-width: 600px;
+        max-width: 800px;
         color: white;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-header h3 {
+        font-size: 2rem;
+        margin: 0;
+    }
+
+    .close-modal {
+        cursor: pointer;
+        font-size: 32px;
+        color: rgba(255, 255, 255, 0.8);
+        transition: color 0.3s ease;
+    }
+
+    .close-modal:hover {
+        color: rgba(255, 255, 255, 1);
+    }
+
+    .complaint-details .detail-row {
+        margin-bottom: 25px;
+    }
+
+    .complaint-details strong {
+        display: inline-block;
+        width: 150px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1rem;
+        vertical-align: top;
+    }
+
+    .complaint-details span,
+    .complaint-details p {
+        display: inline-block;
+        width: calc(100% - 160px);
+        font-size: 1.2rem;
+        line-height: 1.6;
+    }
+
+    #modal-description {
+        white-space: pre-wrap;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+        .modal-content {
+            padding: 20px;
+            width: 95%;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+        }
+
+        .complaint-details strong {
+            display: block;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .complaint-details span,
+        .complaint-details p {
+            display: block;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        #modal-description {
+            margin: 10px 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .modal-content {
+            padding: 15px;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
     }
 
     .modal-header {
