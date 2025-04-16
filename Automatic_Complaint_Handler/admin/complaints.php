@@ -59,14 +59,23 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 
 // Get all complaints for the department with additional details
 $complaints = $db->query(
-    "SELECT c.*, u.first_name, u.last_name, cc.name as category_name
+    "SELECT 
+        c.*, 
+        u.first_name, 
+        u.last_name, 
+        cc.name as category_name,
+        d.name as department_name
      FROM complaints c
      JOIN users u ON c.user_id = u.id
      JOIN complaint_categories cc ON c.category_id = cc.id
      JOIN departments d ON cc.department_id = d.id
-     WHERE d.name = ?
+     WHERE d.name = ? AND cc.department_id = (
+         SELECT department_id 
+         FROM admins 
+         WHERE id = ?
+     )
      ORDER BY c.created_at DESC",
-    [$department]
+    [$department, $_SESSION['user_id']]
 )->get_result()->fetch_all(MYSQLI_ASSOC);
 
 $pageTitle = "Manage Complaints";
@@ -75,7 +84,7 @@ include '../includes/header.php';
 
 <div class="admin-complaints">
     <div class="page-header">
-        <h1><i class="fas fa-tasks"></i> Manage Complaints</h1>
+        <h1><i class="fas fa-tasks"></i> Manage <?php echo htmlspecialchars($department); ?> Department Complaints</h1>
         <a href="dashboard.php" class="btn btn-outline">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
         </a>
@@ -93,6 +102,7 @@ include '../includes/header.php';
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
+                    <th>Category</th>
                     <th>Submitted By</th>
                     <th>Date</th>
                     <th>Status</th>
@@ -104,6 +114,7 @@ include '../includes/header.php';
                 <tr>
                     <td><?php echo $complaint['id']; ?></td>
                     <td><?php echo htmlspecialchars($complaint['title']); ?></td>
+                    <td><?php echo htmlspecialchars($complaint['category_name']); ?></td>
                     <td><?php echo htmlspecialchars($complaint['first_name'] . ' ' . $complaint['last_name']); ?></td>
                     <td><?php echo date('M d, Y', strtotime($complaint['created_at'])); ?></td>
                     <td>

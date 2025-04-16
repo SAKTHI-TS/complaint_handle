@@ -25,20 +25,32 @@ $auth::requireAdmin();
 
 $db = new Database();
 
-// Get department-specific stats
-$department = $auth::getDepartment();
+// Get department-specific stats with double verification
 $stats = $db->query(
     "SELECT 
         COUNT(*) as total,
         SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
         SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress,
-        SUM(CASE WHEN status = 'resolved' THEN 1 ELSE 0 END) as resolved
+        SUM(CASE WHEN status = 'resolved' THEN 1 ELSE 0 END) as resolved,
+        SUM(CASE WHEN status = 'rejected' THEN 1 ELSE 0 END) as rejected
      FROM complaints c
      JOIN complaint_categories cc ON c.category_id = cc.id
      JOIN departments d ON cc.department_id = d.id
-     WHERE d.name = ?",
-    [$department]
+     WHERE d.name = ? 
+     AND cc.department_id = (
+         SELECT department_id 
+         FROM admins 
+         WHERE id = ?
+     )",
+    [$department, $_SESSION['user_id']]
 )->get_result()->fetch_assoc();
+
+// Add null checks for stats display
+$stats['total'] = $stats['total'] ?? 0;
+$stats['pending'] = $stats['pending'] ?? 0;
+$stats['in_progress'] = $stats['in_progress'] ?? 0;
+$stats['resolved'] = $stats['resolved'] ?? 0;
+$stats['rejected'] = $stats['rejected'] ?? 0;
 
 // Get recent complaints with more details
 $recentComplaints = $db->query(
@@ -96,6 +108,12 @@ include dirname(__FILE__) . '/../includes/header.php';
             <div class="stat-value"><?php echo $stats['resolved']; ?></div>
             <div class="stat-label">Resolved</div>
             <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value"><?php echo $stats['rejected']; ?></div>
+            <div class="stat-label">Rejected</div>
+            <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
         </div>
     </div>
     

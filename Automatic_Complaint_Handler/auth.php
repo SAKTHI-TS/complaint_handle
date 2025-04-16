@@ -158,5 +158,13 @@ class Auth {
             exit();
         }
     }
+    
+    public static function requireUser() {
+        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'user') {
+            $_SESSION['error_message'] = "Access denied. User login required.";
+            header("Location: ../login.php");
+            exit();
+        }
+    }
 }
 ?>
