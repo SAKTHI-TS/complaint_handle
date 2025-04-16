@@ -423,6 +423,10 @@ body {
     padding: 20px;
 }
 
+.modal .modal-content {
+    max-width: 600px;
+}
+
 /* No Complaints Message */
 .no-complaints {
     text-align: center;
@@ -487,6 +491,22 @@ body {
 .info-item span {
     display: block;
     padding: 8px 0;
+}
+
+/* Complaint Details */
+.complaint-details .detail-row {
+    margin-bottom: 15px;
+}
+
+.complaint-details strong {
+    display: inline-block;
+    width: 120px;
+    color: #666;
+}
+
+.complaint-details p {
+    margin: 5px 0;
+    line-height: 1.5;
 }
 
 /* Responsive Styles */

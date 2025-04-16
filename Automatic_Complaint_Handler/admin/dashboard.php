@@ -145,7 +145,7 @@ include dirname(__FILE__) . '/../includes/header.php';
                         </span>
                     </td>
                     <td>
-                        <a href="complaints.php?action=view&id=<?php echo $complaint['id']; ?>" class="btn btn-sm btn-info">
+                        <a href="#" class="btn btn-sm btn-info" data-description="<?php echo htmlspecialchars($complaint['description']); ?>">
                             <i class="fas fa-eye"></i> View
                         </a>
                     </td>
@@ -161,5 +161,74 @@ include dirname(__FILE__) . '/../includes/header.php';
         </div>
     </div>
 </div>
+
+<!-- Complaint Details Modal -->
+<div class="modal" id="complaintModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Complaint Details</h3>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="complaint-details">
+                <div class="detail-row">
+                    <strong>Title:</strong>
+                    <span id="modal-title"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Category:</strong>
+                    <span id="modal-category"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Description:</strong>
+                    <p id="modal-description"></p>
+                </div>
+                <div class="detail-row">
+                    <strong>Status:</strong>
+                    <span id="modal-status"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Submitted By:</strong>
+                    <span id="modal-user"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Date:</strong>
+                    <span id="modal-date"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const viewBtns = document.querySelectorAll('.btn-info');
+    const modal = document.getElementById('complaintModal');
+    const closeBtn = modal.querySelector('.close-modal');
+    
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const row = this.closest('tr');
+            
+            // Populate modal with complaint details
+            document.getElementById('modal-title').textContent = row.querySelector('td:nth-child(2)').textContent;
+            document.getElementById('modal-category').textContent = row.querySelector('td:nth-child(3)').textContent;
+            document.getElementById('modal-description').textContent = this.getAttribute('data-description');
+            document.getElementById('modal-status').innerHTML = row.querySelector('td:nth-child(6)').innerHTML;
+            document.getElementById('modal-user').textContent = row.querySelector('td:nth-child(4)').textContent;
+            document.getElementById('modal-date').textContent = row.querySelector('td:nth-child(5)').textContent;
+            
+            modal.style.display = 'block';
+        });
+    });
+    
+    closeBtn.addEventListener('click', () => modal.style.display = 'none');
+    
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) modal.style.display = 'none';
+    });
+});
+</script>
 
 <?php include dirname(__FILE__) . '/../includes/footer.php'; ?>
