@@ -57,9 +57,9 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     }
 }
 
-// Get all complaints for the department
+// Get all complaints for the department with additional details
 $complaints = $db->query(
-    "SELECT c.id, c.title, c.status, c.created_at, u.first_name, u.last_name
+    "SELECT c.*, u.first_name, u.last_name, cc.name as category_name
      FROM complaints c
      JOIN users u ON c.user_id = u.id
      JOIN complaint_categories cc ON c.category_id = cc.id

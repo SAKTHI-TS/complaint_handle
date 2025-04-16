@@ -150,5 +150,13 @@ class Auth {
         
         session_destroy();
     }
+    
+    public static function requireAdmin() {
+        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
+            $_SESSION['error_message'] = "Access denied. Admin privileges required.";
+            header("Location: ../login.php");
+            exit();
+        }
+    }
 }
 ?>

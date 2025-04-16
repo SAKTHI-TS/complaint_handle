@@ -40,9 +40,17 @@ $stats = $db->query(
     [$department]
 )->get_result()->fetch_assoc();
 
-// Get recent complaints
+// Get recent complaints with more details
 $recentComplaints = $db->query(
-    "SELECT c.id, c.title, c.status, c.created_at, u.first_name, u.last_name
+    "SELECT 
+        c.id, 
+        c.title, 
+        c.description,
+        c.status, 
+        c.created_at, 
+        u.first_name, 
+        u.last_name,
+        cc.name as category_name
      FROM complaints c
      JOIN users u ON c.user_id = u.id
      JOIN complaint_categories cc ON c.category_id = cc.id
@@ -98,6 +106,7 @@ include dirname(__FILE__) . '/../includes/header.php';
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
+                    <th>Category</th>
                     <th>Submitted By</th>
                     <th>Date</th>
                     <th>Status</th>
@@ -109,6 +118,7 @@ include dirname(__FILE__) . '/../includes/header.php';
                 <tr>
                     <td><?php echo $complaint['id']; ?></td>
                     <td><?php echo htmlspecialchars($complaint['title']); ?></td>
+                    <td><?php echo htmlspecialchars($complaint['category_name']); ?></td>
                     <td><?php echo htmlspecialchars($complaint['first_name'] . ' ' . $complaint['last_name']); ?></td>
                     <td><?php echo date('M d, Y', strtotime($complaint['created_at'])); ?></td>
                     <td>
@@ -127,7 +137,7 @@ include dirname(__FILE__) . '/../includes/header.php';
         </table>
         
         <div class="view-all">
-            <a href="complaints.php" class="btn btn-outline">
+            <a href="complaints.php" class="btn btn-primary">
                 <i class="fas fa-list"></i> View All Complaints
             </a>
         </div>
